@@ -7,33 +7,35 @@ using Microsoft.EntityFrameworkCore;
 namespace WebAPI.Persistence.Models;
 
 [Table("client", Schema = "CLIENT")]
-public partial class Clienti
+[Index("mail", Name = "ux_client_mail", IsUnique = true)]
+[Index("username", Name = "ux_client_username", IsUnique = true)]
+public partial class client
 {
     [Key]
     public int id_client { get; set; }
 
-    [Column(TypeName = "char")]
-    public char username { get; set; }
+    [StringLength(50)]
+    public string username { get; set; } = null!;
 
-    [Column(TypeName = "char")]
-    public char password { get; set; }
+    [StringLength(100)]
+    public string password { get; set; } = null!;
 
     public int antrenor_id { get; set; }
 
-    [Column(TypeName = "char")]
-    public char first_name { get; set; }
+    [StringLength(100)]
+    public string first_name { get; set; } = null!;
 
-    [Column(TypeName = "char")]
-    public char last_name { get; set; }
+    [StringLength(100)]
+    public string last_name { get; set; } = null!;
 
-    [Column(TypeName = "char")]
-    public char nr_telefon { get; set; }
+    [StringLength(20)]
+    public string nr_telefon { get; set; } = null!;
 
-    [Column(TypeName = "char")]
-    public char? mail { get; set; }
+    [StringLength(255)]
+    public string? mail { get; set; }
 
-    [Column(TypeName = "char")]
-    public char tip { get; set; }
+    [StringLength(10)]
+    public string tip { get; set; } = null!;
 
     public DateOnly? date { get; set; }
 
@@ -41,15 +43,19 @@ public partial class Clienti
 
     public bool plata_lunara { get; set; }
 
-    [Column(TypeName = "char")]
-    public char? dimensiune_brat { get; set; }
+    [StringLength(100)]
+    public string? dimensiune_brat { get; set; }
 
-    [Column(TypeName = "char")]
-    public char? dimensiune_piept { get; set; }
+    [StringLength(100)]
+    public string? dimensiune_piept { get; set; }
 
-    [Column(TypeName = "char")]
-    public char? dimensiune_burta { get; set; }
+    [StringLength(100)]
+    public string? dimensiune_burta { get; set; }
 
-    [Column(TypeName = "char")]
-    public char? dimensiune_picior { get; set; }
+    [StringLength(100)]
+    public string? dimensiune_picior { get; set; }
+
+    [ForeignKey("antrenor_id")]
+    [InverseProperty("clients")]
+    public virtual Antrenori? antrenor { get; set; }
 }

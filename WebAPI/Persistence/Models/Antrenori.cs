@@ -35,4 +35,7 @@ public partial class Antrenori
 
     [StringLength(100)]
     public string password { get; set; } = null!;
+
+    [InverseProperty("antrenor")]
+    public virtual ICollection<client> clients { get; set; } = new List<client>();
 }

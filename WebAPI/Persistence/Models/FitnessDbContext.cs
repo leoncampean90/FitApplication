@@ -17,7 +17,7 @@ public partial class FitnessDbContext : DbContext
 
     public virtual DbSet<Antrenori> antrenoris { get; set; }
 
-    public virtual DbSet<Clienti> clients { get; set; }
+    public virtual DbSet<client> clients { get; set; }
 
     public virtual DbSet<programari> programaris { get; set; }
 
@@ -35,13 +35,17 @@ public partial class FitnessDbContext : DbContext
             entity.Property(e => e.tip).HasDefaultValueSql("'a'::\"char\"");
         });
 
-        modelBuilder.Entity<Clienti>(entity =>
+        modelBuilder.Entity<client>(entity =>
         {
             entity.HasKey(e => e.id_client).HasName("client_pkey");
 
-            entity.Property(e => e.id_client).ValueGeneratedNever();
+            entity.Property(e => e.id_client).UseIdentityAlwaysColumn();
             entity.Property(e => e.plata_lunara).HasDefaultValue(false);
-            entity.Property(e => e.tip).HasDefaultValueSql("'c'::\"char\"");
+            entity.Property(e => e.tip).HasDefaultValueSql("'c'::character varying");
+
+            entity.HasOne(d => d.antrenor).WithMany(p => p.clients)
+                .OnDelete(DeleteBehavior.Restrict)
+                .HasConstraintName("client_antrenor_fk");
         });
 
         modelBuilder.Entity<programari>(entity =>

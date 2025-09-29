@@ -17,17 +17,60 @@ public class AntrenoriController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll(CancellationToken ct)
     {
-        var items = await _db.Set<Antrenori>().AsNoTracking().ToListAsync(ct);
+        var items = await _db.Set<Antrenori>()
+            .AsNoTracking()
+            .Select(a => new
+            {
+                a.antrenor_id,
+                a.tip,
+                a.tip_abonament,
+                a.first_name,
+                a.last_name,
+                a.nr_telefon,
+                a.mail,
+                a.username,
+                clients = a.clients.Select(c => new
+                {
+                    c.id_client,
+                    c.first_name,
+                    c.last_name,
+                    c.username,
+                    c.antrenor_id
+                }).ToList()
+            })
+            .ToListAsync(ct);
+
         return Ok(items);
     }
 
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById(int id, CancellationToken ct)
     {
-        var entity = await _db.Set<Antrenori>().AsNoTracking()
-                              .FirstOrDefaultAsync(a => a.antrenor_id == id, ct);
+        var item = await _db.Set<Antrenori>()
+            .AsNoTracking()
+            .Where(a => a.antrenor_id == id)
+            .Select(a => new
+            {
+                a.antrenor_id,
+                a.tip,
+                a.tip_abonament,
+                a.first_name,
+                a.last_name,
+                a.nr_telefon,
+                a.mail,
+                a.username,
+                clients = a.clients.Select(c => new
+                {
+                    c.id_client,
+                    c.first_name,
+                    c.last_name,
+                    c.username,
+                    c.antrenor_id
+                }).ToList()
+            })
+            .FirstOrDefaultAsync(ct);
 
-        return entity is null ? NotFound() : Ok(entity);
+        return item is null ? NotFound() : Ok(item);
     }
 
     [HttpPost]
