@@ -1,0 +1,28 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.vcxproj.user
+*.vssscc
+*.vspscc
+
+# .NET build
+bin/
+obj/
+Debug/
+Release/
+[Bb]uild/
+artifacts/
+
+# Rider / VS Code
+.idea/
+.vscode/
+
+# Logs
+*.log
+
+# Frontend (if in same repo)
+node_modules/
+dist/
+.env
+.env.*
